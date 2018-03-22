@@ -31,7 +31,11 @@
                 <td>{{ row.id }}</td>
                 <td>{{ row.username }}</td>
                 <td>{{ row.age }}</td>
-                <td>{{ row.gender }}</td>
+                {% if row.gender == 1 %}
+                    <td>男</td>
+                {% else %}
+                    <td>女</td>
+                {% endif %}
                 <td>{{ row.cs.title }}</td>
                 <td><a class="fa fa-edit fon"></a><a class="glyphicon glyphicon-remove fon"></a></td>
             </tr>
