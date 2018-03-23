@@ -24,7 +24,6 @@ def addstudent(request):
 
 def delstudent(request):
     ret = {'status': True, 'error': None}
-    print(request.POST)
     try:
         nid = int(request.POST.get('nid'))
         models.Student.objects.filter(id=nid).delete()

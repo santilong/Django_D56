@@ -37,8 +37,7 @@
                     <td>女</td>
                 {% endif %}
                 <td>{{ row.cs.title }}</td>
-                <td><a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="delstu"
-                                                                  onclick="delitem(this)"></a></td>
+                <td><a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="opendel"></a></td>
             </tr>
         {% endfor %}
         </tbody>
@@ -105,7 +104,15 @@
 <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="alert alert-danger" role="alert">...</div>
+            <div class="alert alert-danger" role="alert">
+                <div>删除学生信息</div>
+            </div>
+            <div style="text-align: center">删除后无法恢复，请确认...</div>
+            <div></div>
+            <div style="margin: 20px 20px 20px 10px;padding: 10px 20px;" >
+                <button type="button" class="btn btn-success" id="delcancle">取消</button>
+                <button type="button" class="btn btn-danger" id="ensuredel">确定</button>
+            </div>
         </div>
     </div>
 </div>
@@ -118,8 +125,32 @@
     $(function () {
         openadd();
         additem();
-        //delitem();
+        opendel();
+        delitem();
     });
+    function delitem() {
+        $('#delcancle').click(function () {
+            $('#delModal').modal('hide');
+        });
+        $('#ensuredel').click(function () {
+            var del_s_id = $(this).parent().parent().parent().parent().attr('del_s_id');
+            $.ajax({
+                url: 'delstudent.html',
+                type: 'POST',
+                data: {'nid':del_s_id},
+                dataType: 'JSON',
+                success: function (obj) {
+                    if (obj.status) {
+                        window.location.reload()
+                    }else {
+                        alert(obj.error)
+                    }
+                }
+            })
+
+        })
+
+    }
     function openadd() {
         $('#openadd').click(function () {
             $('#myModal').modal('show')
@@ -176,7 +207,7 @@
 
                         var tdOption = document.createElement('td');
                         $(tdOption).append(
-                            '<a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="delstu" onclick="delitem(this)"></a>'
+                            '<a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="opendel"></a>'
                         );
                         $(tr).append(tdOption);
 
@@ -190,26 +221,12 @@
             })
         })
     }
-    function delitem(ths) {
-        var v = confirm('是否要删除该学生信息？');
-        if (v) {
-            var stu_id = $(ths).parent().siblings().first().text();
-            if (stu_id) {
-                $.ajax({
-                    url: 'delstudent.html',
-                    type: 'POST',
-                    data: {'nid': stu_id},
-                    success: function (arg) {
-                        var res = JSON.parse(arg);
-                        if (res.status) {
-                            window.location.reload();
-                        } else {
-                            alert(res.error)
-                        }
-                    }
-                })
-            }
-        }
+    function opendel() {
+        $('#tb').on('click','#opendel',function () {
+            var del_s_id = $(this).parent().siblings().first().text();
+            $('#delModal').attr('del_s_id',del_s_id)
+            $('#delModal').modal('show');
+        })
     }
 
 </script>
