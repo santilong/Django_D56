@@ -45,7 +45,7 @@
     </table>
     <!--表格代码 END-->
 </div>
-<!--模态对话框代码-->
+<!--添加学生信息模态对话框代码-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -101,13 +101,24 @@
     </div>
 </div>
 <!--模态对话框代码 END-->
+<!--删除学生信息模态对话框代码-->
+<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="alert alert-danger" role="alert">...</div>
+        </div>
+    </div>
+</div>
+<!--删除学生信息模态对话框代码 END-->
+
+
 <script src="/static/js/jquery-3.3.1.min.js"></script>
 <script src="/static/plugins/bootstrap/js/bootstrap.js"></script>
 <script>
     $(function () {
         openadd();
         additem();
-        delitem();
+        //delitem();
     });
     function openadd() {
         $('#openadd').click(function () {
@@ -119,12 +130,12 @@
             var u = $('#myModal').find(':input[name="username"]').val();
             var a = $('#myModal').find(':input[name="age"]').val();
             $('#myModal').find(':input[name="gender"]').each(function () {
-                if($(this).prop('checked')) {
+                if ($(this).prop('checked')) {
                     g = $(this).val()
                 }
             });
             var c = $('#myModal').find(':input[name="classid"]').val();
-            postData = {'username':u,'age':a,'gender':g,'classid':c};
+            postData = {'username': u, 'age': a, 'gender': g, 'classid': c};
             $.ajax({
                 url: '/addstudent.html',
                 type: 'POST',
@@ -152,20 +163,20 @@
                         var tdGender = document.createElement('td');
                         if (g == '1') {
                             var sex = '男'
-                        }else {
+                        } else {
                             var sex = '女'
                         }
                         $(tdGender).text(sex);
                         $(tr).append(tdGender);
 
                         var tdClassid = document.createElement('td');
-                        var text = $('select[name="classid"]').find('option[value=' + c +']').text();
+                        var text = $('select[name="classid"]').find('option[value=' + c + ']').text();
                         $(tdClassid).text(text);
                         $(tr).append(tdClassid);
 
                         var tdOption = document.createElement('td');
                         $(tdOption).append(
-                            '<a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="delstu"onclick="delitem(this)"></a>'
+                            '<a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="delstu" onclick="delitem(this)"></a>'
                         );
                         $(tr).append(tdOption);
 
@@ -180,21 +191,24 @@
         })
     }
     function delitem(ths) {
-        var stu_id = $(ths).parent().siblings().first().text();
-        if (stu_id) {
-            $.ajax({
-                url: 'delstudent.html',
-                type: 'POST',
-                data: {'nid': stu_id},
-                success: function (arg) {
-                    var res = JSON.parse(arg);
-                    if (res.status) {
-                        window.location.reload();
-                    } else {
-                        alert(res.error)
+        var v = confirm('是否要删除该学生信息？');
+        if (v) {
+            var stu_id = $(ths).parent().siblings().first().text();
+            if (stu_id) {
+                $.ajax({
+                    url: 'delstudent.html',
+                    type: 'POST',
+                    data: {'nid': stu_id},
+                    success: function (arg) {
+                        var res = JSON.parse(arg);
+                        if (res.status) {
+                            window.location.reload();
+                        } else {
+                            alert(res.error)
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 
