@@ -17,7 +17,7 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>ID</th>
+            <th class="hide">ID</th>
             <th>姓名</th>
             <th>年龄</th>
             <th>性别</th>
@@ -25,10 +25,10 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tb">
         {% for row in stu_list %}
             <tr>
-                <td>{{ row.id }}</td>
+                <td class="hide">{{ row.id }}</td>
                 <td>{{ row.username }}</td>
                 <td>{{ row.age }}</td>
                 {% if row.gender == 1 %}
@@ -37,7 +37,8 @@
                     <td>女</td>
                 {% endif %}
                 <td>{{ row.cs.title }}</td>
-                <td><a class="fa fa-edit fon"></a><a class="glyphicon glyphicon-remove fon"></a></td>
+                <td><a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="delstu"
+                                                                  onclick="delitem(this)"></a></td>
             </tr>
         {% endfor %}
         </tbody>
@@ -106,6 +107,7 @@
     $(function () {
         openadd();
         additem();
+        delitem();
     });
     function openadd() {
         $('#openadd').click(function () {
@@ -114,10 +116,76 @@
     }
     function additem() {
         $('#stusave').click(function () {
+            var u = $('#myModal').find(':input[name="username"]').val();
+            var a = $('#myModal').find(':input[name="age"]').val();
+            $('#myModal').find(':input[name="gender"]').each(function () {
+                if($(this).prop('checked')) {
+                    g = $(this).val()
+                }
+            });
+            var c = $('#myModal').find(':input[name="classid"]').val()
+            postData = {'username':u,'age':a,'gender':g,'classid':c};
             $.ajax({
                 url: '/addstudent.html',
                 type: 'POST',
-                data: $('#stuaddform').serialize(),
+                //data: $('#stuaddform').serialize(),
+                data: postData,
+                success: function (arg) {
+                    var res = JSON.parse(arg);
+                    if (res.status) {
+                        //window.location.reload();
+                        //不通过刷新而通过直接自动添加tr和td展示添加结果；
+                        var tr = document.createElement('tr');
+                        var tdID = document.createElement('td');
+                        $(tdID).addClass('hide');
+                        $(tdID).text(res.data);
+                        $(tr).append(tdID);
+
+                        var tdUsername = document.createElement('td');
+                        $(tdUsername).text(u);
+                        console.log(tdUsername);
+                        $(tr).append(tdUsername);
+
+                        var tdAge = document.createElement('td');
+                        $(tdAge).text(a);
+                        $(tr).append(tdAge);
+
+                        var tdGender = document.createElement('td');
+                        if (g == '1') {
+                            var sex = '男'
+                        }else {
+                            var sex = '女'
+                        }
+                        $(tdGender).text(sex);
+                        $(tr).append(tdGender);
+
+                        var tdClassid = document.createElement('td');
+                        $(tdClassid).text(c);
+                        $(tr).append(tdClassid);
+
+                        var tdOption = document.createElement('td');
+                        $(tdOption).append(
+                            '<a class="fa fa-edit fon" id="editstu"></a><a class="glyphicon glyphicon-remove fon" id="delstu"onclick="delitem(this)"></a>'
+                        );
+                        $(tr).append(tdOption);
+
+                        $('#tb').append(tr);
+                        $('#myModal').modal('hide');
+
+                    } else {
+                        alert(res.error)
+                    }
+                }
+            })
+        })
+    }
+    function delitem(ths) {
+        var stu_id = $(ths).parent().siblings().first().text();
+        if (stu_id) {
+            $.ajax({
+                url: 'delstudent.html',
+                type: 'POST',
+                data: {'nid': stu_id},
                 success: function (arg) {
                     var res = JSON.parse(arg);
                     if (res.status) {
@@ -127,8 +195,9 @@
                     }
                 }
             })
-        })
+        }
     }
+
 </script>
 </body>
 </html>
