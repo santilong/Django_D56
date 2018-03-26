@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from app01.views import students
+from app01.views import students,fenye
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^addstudent.html$', students.addstudent),
     url(r'^delstudent.html$', students.delstudent),
     url(r'^editstuinfo.html$', students.editstuinfo),
+    url(r'^fenye1.html$', fenye.fenye1),
+
 ]
