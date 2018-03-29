@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^editstuinfo.html$', students.editstuinfo),
     url(r'^fenye1.html$', fenye.fenye1),
     url(r'^fenye2.html$', fenye.fenye2),
+    url(r'^fenye3.html$', fenye.fenye3),
 
 ]

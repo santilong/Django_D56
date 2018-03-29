@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse,render,redirect
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 INFO_LIST = []
-for i in range(1, 300):
+for i in range(1, 900):
     dic = {'name': 'root' + str(i), 'age': str(i)}
     INFO_LIST.append(dic)
 
@@ -44,3 +44,13 @@ def fenye2(request):
     except EmptyPage as e :
         posts = paginator.page(paginator.num_pages)
     return render(request,'fenye2.html',{'posts':posts})
+
+def fenye3(request):
+    from app01.views.fenyeClass import PagnatorCustom
+    total_num = len(INFO_LIST) ### 数据总个数
+    current_page = request.GET.get('p') ###当前页
+    obj = PagnatorCustom(total_num,current_page) ###创建自定义分页类对象
+    start = int(obj.start) ###起始位置
+    end = int(obj.end) ###结束位置
+    info_list = INFO_LIST[start:end] ###数据切片
+    return render(request,'fenye3.html',{'info_list':info_list,'obj':obj})

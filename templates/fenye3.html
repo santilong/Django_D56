@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <div>
+    {% for row in info_list %}
+        <li style="margin: 0 20px;">{{ row.name }}-{{ row.age }}</li>
+    {% endfor %}
+    </div>
+    <div>
+        <ul class="pagination pagination-sm">
+            {{ obj.page_num_str |safe }}
+        </ul>
+
+    </div>
+</body>
+</html>

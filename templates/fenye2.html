@@ -17,9 +17,9 @@
 
     {% for i in posts.paginator.range %}
         {% if i == posts.number %}
-            <a style="font-size: 30px;" href="fenye2.html?p={{ i }}">{{ i }}</a>
+            <div style="display: inline-block;"><a style="font-size: 30px;" href="fenye2.html?p={{ i }}">{{ i }}</a></div>
         {% else %}
-            <a href="fenye2.html?p={{ i }}">{{ i }}</a>
+            <div style="display: inline-block;"><a href="fenye2.html?p={{ i }}">{{ i }}</a></div>
         {% endif %}
     {% endfor %}
 
