@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/addusers.html" method="post" novalidate>
+        {% csrf_token %}
+        <p>{{ user_info.user }}{{ user_info.errors.user.0 }}</p>
+        <p>{{ user_info.email }}{{ user_info.errors.email.0 }}</p>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

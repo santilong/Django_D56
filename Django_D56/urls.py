@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from app01.views import students,fenye
 from app02 import views as v2
+from app03 import views as v3
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,5 +29,8 @@ urlpatterns = [
     url(r'^fenye2.html$', fenye.fenye2),
     url(r'^fenye3.html$', fenye.fenye3),
     url(r'^f1.html$', v2.f1),
+    url(r'^users.html$', v3.users),
+    url(r'^addusers.html$', v3.addusers),
+    url(r'^edituser-(\d+)', v3.edituser),
 
 ]

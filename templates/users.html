@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <p><a href="addusers.html">添加</a></p>
+    {% for row in user_lsit %}
+        <li>{{ row.id }} - {{ row.user }} - {{ row.email }} <a href="edituser-{{ row.id }}">修改</a></li>
+    {% endfor %}
+</body>
+</html>
